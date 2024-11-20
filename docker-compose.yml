@@ -1,0 +1,46 @@
+services:
+    mysql:
+        image: mysql:8.0.32
+        environment:
+            - MYSQL_ROOT_PASSWORD=root_password
+            - MYSQL_DATABASE=payment_db
+        volumes:
+            - mysql_data:/var/lib/mysql
+        command: --sql-mode="ANSI_QUOTES"  
+        networks:
+            - my_network
+
+    builder:
+        image: maven:3.9-eclipse-temurin-17
+        container_name: maven-builder
+        platform: linux/amd64
+        working_dir: /app
+        volumes:
+            - .:/app
+            - ~/.m2:/root/.m2
+            - build_output:/app/target
+        command: mvn clean install -DskipTests
+
+    petstore_payment:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: petstore_payment
+        environment:
+            SPRING_PROFILES_ACTIVE: docker
+        ports:
+            - "8080:8080"
+        depends_on:
+            - mysql
+            - builder
+        volumes:
+            - build_output:/app/target 
+        networks:
+            - my_network
+
+volumes:
+    mysql_data:
+    build_output: 
+
+networks:
+    my_network:
