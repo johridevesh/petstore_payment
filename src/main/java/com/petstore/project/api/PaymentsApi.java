@@ -6,6 +6,7 @@
 package com.petstore.project.api;
 
 import com.petstore.project.model.Payment;
+import com.petstore.project.model.PaymentResponse;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,7 +52,7 @@ public interface PaymentsApi {
         summary = "List all payments",
         responses = {
             @ApiResponse(responseCode = "200", description = "A list of payments", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Payment.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PaymentResponse.class)))
             })
         }
     )
@@ -61,7 +62,7 @@ public interface PaymentsApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<List<Payment>> paymentsGet(
+    default ResponseEntity<List<PaymentResponse>> paymentsGet(
         
     ) throws Exception {
         getRequest().ifPresent(request -> {
@@ -115,7 +116,7 @@ public interface PaymentsApi {
         summary = "Get a payment by ID",
         responses = {
             @ApiResponse(responseCode = "200", description = "Payment details", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Payment.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentResponse.class))
             })
         }
     )
@@ -125,7 +126,7 @@ public interface PaymentsApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<Payment> paymentsIdGet(
+    default ResponseEntity<PaymentResponse> paymentsIdGet(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
     ) throws Exception {
         getRequest().ifPresent(request -> {
