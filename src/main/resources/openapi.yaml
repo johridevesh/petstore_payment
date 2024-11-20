@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  description: API for processing payments and managing billing
+  title: Payment Service API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /payments:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Payment"
+                type: array
+          description: A list of payments
+      summary: List all payments
+      x-accepts:
+      - application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Payment"
+      responses:
+        "201":
+          description: Payment created
+      summary: Create a new payment
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /payments/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Payment deleted
+      summary: Delete a payment
+      x-accepts:
+      - application/json
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+          description: Payment details
+      summary: Get a payment by ID
+      x-accepts:
+      - application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Payment"
+      responses:
+        "200":
+          description: Payment updated
+      summary: Update a payment
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+components:
+  schemas:
+    Payment:
+      example:
+        amount: 1.4658129805029452
+        id: 0
+        order_id: 6
+        payment_date: 2000-01-23T04:56:07.000+00:00
+        payment_method: payment_method
+      properties:
+        id:
+          type: integer
+        order_id:
+          type: integer
+        amount:
+          format: double
+          type: number
+        payment_date:
+          format: date-time
+          type: string
+        payment_method:
+          type: string
+      type: object
